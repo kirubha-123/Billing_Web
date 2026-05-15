@@ -248,6 +248,10 @@ app.post('/api/invoices', async (req, res) => {
     res.status(201).json(invoice);
   } catch (error) {
     console.error('Create invoice error:', error);
+    // Handle duplicate invoiceNumber (unique index) with a clear 400 response
+    if (error && error.code === 11000) {
+      return res.status(400).json({ error: 'Invoice number already exists' });
+    }
     res.status(500).json({ error: 'Failed to create invoice' });
   }
 });
