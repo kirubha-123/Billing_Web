@@ -8,7 +8,7 @@ export const api = {
     return res.json();
   },
 
-  async updateShop(shopData) {
+  async updateShop(shopData: any) {
     const res = await fetch(`${BACKEND_URL}/api/shop`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -25,13 +25,13 @@ export const api = {
     return res.json();
   },
 
-  async getProduct(id) {
+  async getProduct(id: string) {
     const res = await fetch(`${BACKEND_URL}/api/products/${id}`);
     if (!res.ok) throw new Error('Failed to fetch product');
     return res.json();
   },
 
-  async createProduct(productData) {
+  async createProduct(productData: any) {
     const res = await fetch(`${BACKEND_URL}/api/products`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -41,7 +41,7 @@ export const api = {
     return res.json();
   },
 
-  async updateProduct(id, productData) {
+  async updateProduct(id: string, productData: any) {
     const res = await fetch(`${BACKEND_URL}/api/products/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -51,7 +51,7 @@ export const api = {
     return res.json();
   },
 
-  async deleteProduct(id) {
+  async deleteProduct(id: string) {
     const res = await fetch(`${BACKEND_URL}/api/products/${id}`, {
       method: 'DELETE',
     });
@@ -59,7 +59,7 @@ export const api = {
     return res.json();
   },
 
-  async searchProductByBarcode(barcode) {
+  async searchProductByBarcode(barcode: string) {
     try {
       const res = await fetch(`${BACKEND_URL}/api/products/search/barcode/${barcode}`);
       if (!res.ok) return null;
@@ -76,13 +76,13 @@ export const api = {
     return res.json();
   },
 
-  async getInvoice(id) {
+  async getInvoice(id: string) {
     const res = await fetch(`${BACKEND_URL}/api/invoices/${id}`);
     if (!res.ok) throw new Error('Failed to fetch invoice');
     return res.json();
   },
 
-  async createInvoice(invoiceData) {
+  async createInvoice(invoiceData: any) {
     const res = await fetch(`${BACKEND_URL}/api/invoices`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -93,7 +93,7 @@ export const api = {
   },
 
   // SMS endpoint
-  async sendSMS(phoneNumber, message) {
+  async sendSMS(phoneNumber: string, message: string) {
     const res = await fetch(`${BACKEND_URL}/api/sms`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
