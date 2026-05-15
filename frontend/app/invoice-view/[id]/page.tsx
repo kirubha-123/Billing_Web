@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from 'next/navigation';
 import { ArrowLeft, Download, Share2, Copy, Check } from "lucide-react";
 import Link from "next/link";
+import { BACKEND_URL } from "@/lib/api";
 
 interface InvoiceData {
   _id: string;
@@ -42,10 +43,8 @@ export default function InvoiceViewPage({ params }: { params: { id: string } }) 
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-        
         // Fetch invoice
-        const invoiceRes = await fetch(`${backendUrl}/api/invoices/${id}`);
+        const invoiceRes = await fetch(`${BACKEND_URL}/api/invoices/${id}`);
         if (!invoiceRes.ok) {
           throw new Error('Invoice not found');
         }
@@ -53,7 +52,7 @@ export default function InvoiceViewPage({ params }: { params: { id: string } }) 
         setInvoice(invoiceData);
 
         // Fetch shop details
-        const shopRes = await fetch(`${backendUrl}/api/shop`);
+        const shopRes = await fetch(`${BACKEND_URL}/api/shop`);
         if (shopRes.ok) {
           const shopData = await shopRes.json();
           setShopDetails(shopData);

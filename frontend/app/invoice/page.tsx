@@ -5,6 +5,7 @@ import { useAppContext } from "@/context/AppContext";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, FileCheck, CheckCircle2, AlertCircle, Loader2, Copy, Check, QrCode } from "lucide-react";
 import { QRCodeCanvas } from "qrcode.react";
+import { BACKEND_URL } from "@/lib/api";
 
 interface InvoiceResponse {
   _id: string;
@@ -40,8 +41,7 @@ export default function InvoicePage() {
     setIsSending(true);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-      const invoiceResponse = await fetch(`${backendUrl}/api/invoices`, {
+      const invoiceResponse = await fetch(`${BACKEND_URL}/api/invoices`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -79,8 +79,7 @@ export default function InvoicePage() {
           try { const u = new URL(envBase); setDetectedIp(u.hostname); } catch (e) { /* ignore */ }
         } else if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
           try {
-            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
-            const resp = await fetch(`${backendUrl}/api/local-ip`);
+            const resp = await fetch(`${BACKEND_URL}/api/local-ip`);
             if (resp.ok) {
               const data = await resp.json();
               if (data.ip) {
