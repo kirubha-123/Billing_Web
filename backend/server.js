@@ -66,6 +66,42 @@ const Product = require('./models/Product');
 const Invoice = require('./models/Invoice');
 const Shop = require('./models/Shop');
 
+// Seed default supermarket products on startup
+const seedDefaultProducts = async () => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      console.log('⚠️  MongoDB not configured, skipping product seeding');
+      return;
+    }
+
+    const existingProducts = await Product.find();
+    if (existingProducts.length > 0) {
+      console.log('✅ Products already exist in database, skipping seed');
+      return;
+    }
+
+    const defaultProducts = [
+      { name: 'Basmati Rice 10kg', price: 450, barcode: '1001', category: 'Grains' },
+      { name: 'Cooking Oil 1L', price: 580, barcode: '1002', category: 'Oils' },
+      { name: 'Milk 1L', price: 65, barcode: '1003', category: 'Dairy' },
+      { name: 'Bread 400g', price: 45, barcode: '1004', category: 'Bakery' },
+      { name: 'Eggs 12pcs', price: 75, barcode: '1005', category: 'Dairy' },
+      { name: 'Tomatoes 1kg', price: 50, barcode: '1006', category: 'Vegetables' },
+      { name: 'Onions 1kg', price: 40, barcode: '1007', category: 'Vegetables' },
+      { name: 'Potatoes 2kg', price: 60, barcode: '1008', category: 'Vegetables' },
+      { name: 'Apples 1kg', price: 120, barcode: '1009', category: 'Fruits' },
+      { name: 'Bananas 1kg', price: 40, barcode: '1010', category: 'Fruits' }
+    ];
+
+    await Product.insertMany(defaultProducts);
+    console.log('✅ Default supermarket products seeded into database');
+  } catch (error) {
+    console.error('❌ Error seeding products:', error.message);
+  }
+};
+
+seedDefaultProducts();
+
 const PORT = process.env.PORT || 5000;
 
 // Helper: determine local LAN IPv4 address

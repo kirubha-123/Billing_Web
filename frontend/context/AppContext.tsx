@@ -82,7 +82,8 @@ const readStoredValue = <T,>(key: string): T | null => {
 };
 
 const persistState = () => {
-  localStorage.setItem("billing_products", JSON.stringify(appState.products));
+  // Don't persist products to localStorage - they're managed by backend API
+  // Only persist cart and shop details for local UX
   localStorage.setItem("billing_cart", JSON.stringify(appState.cart));
   localStorage.setItem("billing_shop", JSON.stringify(appState.shopDetails));
 };
@@ -92,12 +93,13 @@ const hydrateStateFromStorage = () => {
     return;
   }
 
-  const storedProducts = readStoredValue<Product[]>("billing_products");
+  // Don't load products from localStorage - they're fetched from backend API
+  // Only load cart and shop details from storage
   const storedCart = readStoredValue<CartItem[]>("billing_cart");
   const storedShop = readStoredValue<ShopDetails>("billing_shop");
 
   appState = {
-    products: storedProducts ?? defaultProducts,
+    products: defaultProducts, // Will be replaced by backend fetch
     cart: storedCart ?? [],
     shopDetails: storedShop ?? defaultShopDetails,
   };
@@ -133,9 +135,39 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const appSnapshot = useSyncExternalStore(subscribe, () => appState, () => defaultAppState);
+  const [isLoading, setIsLoading] = React.useState(true);
 
+  // Fetch products from backend on mount
   useEffect(() => {
-    hydrateStateFromStorage();
+    const fetchProducts = async () => {
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+        const response = await fetch(`${backendUrl}/api/products`);
+        if (response.ok) {
+          const backendProducts = await response.json();
+          // Convert backend format to app format
+          const formattedProducts = backendProducts.map((p: any) => ({
+            id: p._id || p.id,
+            name: p.name,
+            price: p.price,
+            barcode: p.barcode,
+          }));
+          setAppState({
+            ...appState,
+            products: formattedProducts && formattedProducts.length > 0 ? formattedProducts : defaultProducts,
+          });
+        } else {
+          hydrateStateFromStorage();
+        }
+      } catch (error) {
+        console.error('Failed to fetch products from backend:', error);
+        hydrateStateFromStorage();
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   const { products, cart, shopDetails } = appSnapshot;
@@ -144,36 +176,71 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setAppState({ ...appState, shopDetails: details });
   };
 
-  const addProduct = (productData: Omit<Product, "id">) => {
-    const newProduct = {
-      ...productData,
-      barcode: productData.barcode?.trim() || undefined,
-      id: Date.now().toString(),
-    };
-
-    setAppState({
-      ...appState,
-      products: [...products, newProduct],
-    });
+  const addProduct = async (productData: Omit<Product, "id">) => {
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const response = await fetch(`${backendUrl}/api/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData),
+      });
+      if (response.ok) {
+        const newProduct = await response.json();
+        setAppState({
+          ...appState,
+          products: [...products, { id: newProduct._id, name: newProduct.name, price: newProduct.price, barcode: newProduct.barcode }],
+        });
+      } else {
+        console.error('Failed to add product to backend');
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+    }
   };
 
-  const updateProduct = (id: string, productData: Omit<Product, "id">) => {
-    setAppState({
-      ...appState,
-      products: products.map(product =>
-        product.id === id
-          ? { ...productData, barcode: productData.barcode?.trim() || undefined, id }
-          : product
-      ),
-    });
+  const updateProduct = async (id: string, productData: Omit<Product, "id">) => {
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const response = await fetch(`${backendUrl}/api/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData),
+      });
+      if (response.ok) {
+        setAppState({
+          ...appState,
+          products: products.map(product =>
+            product.id === id
+              ? { ...productData, barcode: productData.barcode?.trim() || undefined, id }
+              : product
+          ),
+        });
+      } else {
+        console.error('Failed to update product');
+      }
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
   };
 
-  const deleteProduct = (id: string) => {
-    setAppState({
-      ...appState,
-      products: products.filter(product => product.id !== id),
-      cart: cart.filter(item => item.id !== id),
-    });
+  const deleteProduct = async (id: string) => {
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+      const response = await fetch(`${backendUrl}/api/products/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setAppState({
+          ...appState,
+          products: products.filter(product => product.id !== id),
+          cart: cart.filter(item => item.id !== id),
+        });
+      } else {
+        console.error('Failed to delete product');
+      }
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
   };
 
   const addToCart = (product: Product) => {
