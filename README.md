@@ -71,7 +71,8 @@ A modern, full-stack billing and invoice management web application built with *
    FAST2SMS_API_KEY=your_api_key
    JWT_SECRET=your_secret_key
    NODE_ENV=development
-   CORS_ORIGIN=http://localhost:3000
+   CORS_ORIGINS=http://localhost:3000,https://your-frontend.vercel.app
+   CORS_ALLOW_VERCEL_PREVIEWS=true
    ```
 
 4. **Start backend server**

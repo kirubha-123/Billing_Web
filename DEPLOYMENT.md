@@ -30,7 +30,8 @@ FAST2SMS_API_KEY=your_key_here
 JWT_SECRET=your_secure_secret_key
 NODE_ENV=production
 PORT=5000
-CORS_ORIGIN=https://your-frontend-domain.vercel.app
+CORS_ORIGINS=https://your-frontend-domain.vercel.app,https://your-custom-domain.com
+CORS_ALLOW_VERCEL_PREVIEWS=true
 ```
 
 ### Step 4: Deploy
@@ -162,14 +163,16 @@ Add database indexes
 ```
 NODE_ENV=development
 MONGODB_URI=mongodb://localhost:27017/billing_db
-CORS_ORIGIN=http://localhost:3000
+CORS_ORIGINS=http://localhost:3000
+CORS_ALLOW_VERCEL_PREVIEWS=false
 ```
 
 ### Production (.env)
 ```
 NODE_ENV=production
 MONGODB_URI=mongodb+srv://...
-CORS_ORIGIN=https://your-domain.com
+CORS_ORIGINS=https://your-domain.com,https://your-project.vercel.app
+CORS_ALLOW_VERCEL_PREVIEWS=true
 ```
 
 ## Database Migration (if needed)

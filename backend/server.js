@@ -6,9 +6,39 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+// Build an allow-list from comma-separated env values.
+// Supports both CORS_ORIGINS and legacy CORS_ORIGIN.
+const rawCorsOrigins = process.env.CORS_ORIGINS || process.env.CORS_ORIGIN || 'http://localhost:3000';
+const allowedOrigins = rawCorsOrigins
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+function isAllowedOrigin(origin) {
+  // Non-browser requests may not send an Origin header.
+  if (!origin) return true;
+
+  if (allowedOrigins.includes(origin)) return true;
+
+  const allowVercelPreviews = String(process.env.CORS_ALLOW_VERCEL_PREVIEWS ?? 'true').toLowerCase();
+
+  // Allow Vercel preview deployments when enabled.
+  if ((allowVercelPreviews === 'true' || allowVercelPreviews === '1') && /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) {
+    return true;
+  }
+
+  return false;
+}
+
 // Middleware
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    if (isAllowedOrigin(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true,
 }));
 app.use(express.json());
