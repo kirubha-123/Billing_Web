@@ -24,13 +24,20 @@ export const normalizeBarcode = (value?: string | null) =>
   value ? value.replace(/\s+/g, "").toLowerCase() : "";
 
 const defaultProducts: Product[] = [
-  { id: "1", name: "Premium Widget", price: 49.99, barcode: "8901234567890" },
-  { id: "2", name: "Super Service", price: 199.0, barcode: "8901234567891" },
-  { id: "3", name: "Basic Plan", price: 9.99, barcode: "8901234567892" },
+  { id: "1", name: "Basmati Rice 10kg", price: 450, barcode: "8901234567890" },
+  { id: "2", name: "Cooking Oil 5L", price: 580, barcode: "8901234567891" },
+  { id: "3", name: "Sugar 1kg", price: 45, barcode: "8901234567892" },
+  { id: "4", name: "Milk 1L", price: 65, barcode: "8901234567893" },
+  { id: "5", name: "Bread", price: 40, barcode: "8901234567894" },
+  { id: "6", name: "Eggs Dozen", price: 90, barcode: "8901234567895" },
+  { id: "7", name: "Chicken 1kg", price: 250, barcode: "8901234567896" },
+  { id: "8", name: "Fresh Vegetables Mix", price: 120, barcode: "8901234567897" },
+  { id: "9", name: "Tea Leaves 500g", price: 180, barcode: "8901234567898" },
+  { id: "10", name: "Coffee Powder 200g", price: 220, barcode: "8901234567899" },
 ];
 
 const defaultShopDetails: ShopDetails = {
-  name: "My Awesome Shop",
+  name: "KINU's MART",
   address: "123 Main Street, City, Country",
   phone: "+1 234 567 890",
   gstNumber: "GST123456789",

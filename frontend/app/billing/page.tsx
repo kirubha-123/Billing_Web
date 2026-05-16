@@ -137,15 +137,15 @@ export default function BillingPage() {
             <div className="pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3 mb-6">
               <div className="flex justify-between text-slate-600 dark:text-slate-400">
                 <span>Subtotal</span>
-                <span className="font-medium text-slate-900 dark:text-white">${cartTotal.toFixed(2)}</span>
+                <span className="font-medium text-slate-900 dark:text-white">₹{cartTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-slate-600 dark:text-slate-400">
                 <span>Tax (10%)</span>
-                <span className="font-medium text-slate-900 dark:text-white">${tax.toFixed(2)}</span>
+                <span className="font-medium text-slate-900 dark:text-white">₹{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center pt-3 border-t border-slate-100 dark:border-slate-700">
                 <span className="text-lg font-bold text-slate-900 dark:text-white">Total</span>
-                <span className="text-2xl font-black text-blue-600 dark:text-blue-400">${finalTotal.toFixed(2)}</span>
+                <span className="text-2xl font-black text-blue-600 dark:text-blue-400">₹{finalTotal.toFixed(2)}</span>
               </div>
             </div>
 

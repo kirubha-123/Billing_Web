@@ -17,9 +17,9 @@ export default function CartItem({ item }: CartItemProps) {
           {item.name}
         </h4>
         <div className="text-blue-600 dark:text-blue-400 font-bold mt-0.5">
-          ${(item.price * item.quantity).toFixed(2)}
+          ₹{(item.price * item.quantity).toFixed(2)}
           <span className="text-sm font-normal text-slate-500 dark:text-slate-400 ml-2">
-            (${item.price.toFixed(2)} each)
+            (₹{item.price.toFixed(2)} each)
           </span>
         </div>
       </div>

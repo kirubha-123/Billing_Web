@@ -26,7 +26,7 @@ export default function ProductCard({
             {product.name}
           </h3>
           <p className="text-2xl font-bold text-slate-900 dark:text-white mt-1">
-            ${product.price.toFixed(2)}
+            ₹{product.price.toFixed(2)}
           </p>
         </div>
         <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-lg">

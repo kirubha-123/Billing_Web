@@ -198,8 +198,8 @@ export default function InvoiceViewPage({ params }: { params: { id: string } }) 
                   <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-700/50">
                     <td className="px-4 py-3 text-slate-900 dark:text-white">{item.name}</td>
                     <td className="px-4 py-3 text-center text-slate-600 dark:text-slate-400">{item.quantity}</td>
-                    <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400">${item.price.toFixed(2)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-white">${(item.price * item.quantity).toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right text-slate-600 dark:text-slate-400">₹{item.price.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-white">₹{(item.price * item.quantity).toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>

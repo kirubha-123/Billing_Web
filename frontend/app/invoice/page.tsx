@@ -303,8 +303,8 @@ export default function InvoicePage() {
                     <tr key={item.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
                       <td className="py-4 px-4">{item.name}</td>
                       <td className="py-4 px-4 text-center">{item.quantity}</td>
-                      <td className="py-4 px-4 text-right">${item.price.toFixed(2)}</td>
-                      <td className="py-4 px-4 text-right font-medium">${(item.price * item.quantity).toFixed(2)}</td>
+                      <td className="py-4 px-4 text-right">₹{item.price.toFixed(2)}</td>
+                      <td className="py-4 px-4 text-right font-medium">₹{(item.price * item.quantity).toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -321,15 +321,15 @@ export default function InvoicePage() {
 
               <div className="flex justify-between items-center text-slate-300">
                 <span>Subtotal</span>
-                <span>${cartTotal.toFixed(2)}</span>
+                <span>₹{cartTotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center text-slate-300 pb-4 border-b border-slate-700">
                 <span>Tax (10%)</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>₹{tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center text-xl font-bold pt-2">
                 <span>Total Due</span>
-                <span className="text-blue-400">${finalTotal.toFixed(2)}</span>
+                <span className="text-blue-400">₹{finalTotal.toFixed(2)}</span>
               </div>
             </div>
 

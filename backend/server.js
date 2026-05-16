@@ -106,7 +106,7 @@ app.get('/api/shop', async (req, res) => {
     const shop = await Shop.findOne().exec();
     if (!shop) {
       return res.json({
-        name: 'My Awesome Shop',
+        name: 'KINU\'s MART',
         address: '123 Main Street, City, Country',
         phone: '+1 234 567 890',
         gstNumber: 'GST123456789',
@@ -257,7 +257,7 @@ app.post('/api/invoices', async (req, res) => {
     // Ensure we have a shopId to associate the invoice with
     let shop = await Shop.findOne().exec();
     if (!shop) {
-      shop = new Shop({ name: 'My Awesome Shop' });
+      shop = new Shop({ name: 'KINU\'s MART' });
       await shop.save();
     }
 
